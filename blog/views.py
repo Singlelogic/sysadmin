@@ -3,12 +3,7 @@ from django.views.generic import View
 
 from .models import Post, Tag
 from .utils import ObjectDetailMixin
-from .forms import TagForm
-
-
-def posts_list(request):
-    posts = Post.objects.all()
-    return render(request, 'blog/index.html', context={'posts': posts})
+from .forms import TagForm, PostForm
 
 
 class PostDetail(ObjectDetailMixin, View):
@@ -19,6 +14,22 @@ class PostDetail(ObjectDetailMixin, View):
 class TagDetail(ObjectDetailMixin, View):
     model = Tag
     template = 'blog/tag_detail.html'
+
+
+class PostCreate(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'blog/post_create.html', context={'form': form})
+
+    def post(self, request):
+        bound_form = PostForm(request.POST)
+
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            return redirect(new_post)
+        return render(request, 'blog/post_create.html', context={
+            'form': bound_form
+        })
 
 
 class TagCreate(View):
@@ -35,6 +46,11 @@ class TagCreate(View):
         return render(request, 'blog/tag_create.html', context={
             'form': bound_form
         })
+
+
+def posts_list(request):
+    posts = Post.objects.all()
+    return render(request, 'blog/index.html', context={'posts': posts})
 
 
 def tags_list(request):
