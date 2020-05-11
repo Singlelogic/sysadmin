@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render
 from django.views.generic import View
 
 from .forms import TagForm, PostForm
 from .models import Post, Tag
-from .utils import ObjectDetailMixin, OblectCreateMixin, ObjectUpdateMixin
+from .utils import *
 
 
 class PostDetail(ObjectDetailMixin, View):
@@ -38,17 +38,16 @@ class TagUpdate(ObjectUpdateMixin, View):
     template = 'blog/tag_update_form.html'
 
 
-class TagDelete(View):
-    def get(self, request, slug):
-        tag = Tag.objects.get(slug__iexact=slug)
-        return render(request, 'blog/tag_delete_form.html', context={
-            'tag': tag
-        })
+class PostDelete(ObjectDeleteMixin, View):
+    model = Post
+    template = 'blog/post_delete_form.html'
+    redirect_url = 'posts_list_url'
 
-    def post(self, request, slug):
-        tag = Tag.objects.get(slug__iexact=slug)
-        tag.delete()
-        return redirect(reverse('tags_list_url'))
+
+class TagDelete(ObjectDeleteMixin, View):
+    model = Tag
+    template = 'blog/tag_delete_form.html'
+    redirect_url = 'tags_list_url'
 
 
 def posts_list(request):

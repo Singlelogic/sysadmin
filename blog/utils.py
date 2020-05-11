@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 
 
 class ObjectDetailMixin:
@@ -13,7 +12,7 @@ class ObjectDetailMixin:
         })
 
 
-class OblectCreateMixin(View):
+class OblectCreateMixin:
     model_form = None
     template = None
 
@@ -30,7 +29,7 @@ class OblectCreateMixin(View):
         return render(request, self.template, context={'form': bound_form})
 
 
-class ObjectUpdateMixin(View):
+class ObjectUpdateMixin:
     model = None
     model_form = None
     template = None
@@ -53,3 +52,20 @@ class ObjectUpdateMixin(View):
             'form': bound_form,
             self.model.__name__.lower(): obj
         })
+
+
+class ObjectDeleteMixin:
+    model = None
+    template = None
+    redirect_url = None
+
+    def get(self, request, slug):
+        obj = self.model.objects.get(slug__iexact=slug)
+        return render(request, self.template, context={
+            self.model.__name__.lower(): obj
+        })
+
+    def post(self, request, slug):
+        obj = self.model.objects.get(slug__iexact=slug)
+        obj.delete()
+        return redirect(reverse(self.redirect_url))
