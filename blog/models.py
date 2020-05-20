@@ -15,6 +15,7 @@ class Post(models.Model):
     body = models.TextField(blank=True, db_index=True)
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
     date_pub = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(blank=True, upload_to='images/')
 
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'slug': self.slug})

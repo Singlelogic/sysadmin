@@ -1,4 +1,4 @@
-.admin-panel {
+.admin-panel { /* class admin-panel */
     border: 1px solid #999;
     border-radius: 6px;
     position: fixed;
@@ -12,11 +12,24 @@
     opacity: 1;
 }
 
-.admin-panel a {
+.admin-panel a { /* class admin-panel; a nested tag */
     display: block;
     margin: 5px 0;
 }
 
-a.edit, a.delete {
+a.edit, a.delete { /* a tag; edit/deleted class */
     display: none;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.center-pic{
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
 }

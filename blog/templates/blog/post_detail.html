@@ -8,7 +8,12 @@
     <h1 class="mt-5">
         {{ post.title }}
     </h1>
+
+    {% if post.image %}
+        <img src="{{ post.image.url }}">
+    {% endif %}
+
     <p>
-        {{ post.body }}
+        {{ post.body|linebreaksbr }}
     </p>
 {% endblock %}
