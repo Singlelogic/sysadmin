@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from .forms import TagForm, PostForm
 from .models import Post, Tag
-from .utils import *
+from .mixins import *
 
 
 class PostDetail(ObjectDetailMixin, View):

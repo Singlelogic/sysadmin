@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from PIL import Image
+
 
 from .models import Tag, Post
 
