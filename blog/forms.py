@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from PIL import Image
 
 from .models import Tag, Post
 
@@ -27,7 +28,7 @@ class TagForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'body', 'tags']
+        fields = ['title', 'slug', 'image_preview', 'body', 'tags']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),

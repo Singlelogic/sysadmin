@@ -15,7 +15,7 @@ class Post(models.Model):
     body = models.TextField(blank=True, db_index=True)
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
     date_pub = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(blank=True, upload_to='images/')
+    image_preview = models.ImageField(upload_to='images/')
 
     def get_absolute_url(self):
         return reverse('post_detail_url', kwargs={'slug': self.slug})
@@ -56,3 +56,8 @@ class Tag(models.Model):
 
     class Meta:
         ordering = ['title']
+
+
+class Images(models.Model):
+    post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
