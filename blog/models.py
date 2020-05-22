@@ -1,7 +1,13 @@
+import os
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
 from time import time
+from PIL import Image
+
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def gen_slug(s):
@@ -30,6 +36,21 @@ class Post(models.Model):
         if not self.id:
             self.slug = gen_slug(self.title)
         super().save(*args, **kwargs)
+
+        if self.image_preview:
+            filepath = self.image_preview.url
+            width = self.image_preview.width
+            height = self.image_preview.height
+            max_size = max(width, height)
+
+            if max_size > 200:
+                image = Image.open(BASE_DIR + filepath)
+                image = image.resize(
+                    (round(width / max_size * 200),
+                     round(height / max_size * 200)),
+                    Image.ANTIALIAS
+                )
+                image.save(BASE_DIR + filepath)
 
     def __str__(self):
         return self.title
