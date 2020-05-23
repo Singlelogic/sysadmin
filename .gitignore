@@ -3,3 +3,4 @@ db.sqlite3
 *.py[co]
 __pycache__
 media/
+test.py
