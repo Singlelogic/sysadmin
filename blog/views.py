@@ -3,9 +3,10 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.forms import formset_factory
 
-from .forms import TagForm, PostForm
-from .models import Post, Tag
+from .forms import TagForm, PostForm, ImageForm
+from .models import Post, Tag, Images
 from .mixins import *
 
 
@@ -15,9 +16,35 @@ class PostDetail(ObjectDetailMixin, View):
 
 
 class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
-    model_form = PostForm
-    template = 'blog/post_create.html'
+    ImageFormSet = formset_factory(ImageForm, extra=5)
     raise_exception = True
+
+    def get(self, request):
+        form = PostForm()
+        image_formset = self.ImageFormSet()
+        return render(request, 'blog/post_create.html', context={
+            'form': form,
+            'formset': image_formset
+        })
+
+    def post(self, request):
+        post_form = PostForm(request.POST, request.FILES)
+        image_formset = self.ImageFormSet(request.POST, request.FILES)
+
+        if post_form.is_valid() and image_formset.is_valid():
+            new_post = post_form.save()
+
+            for form in image_formset.cleaned_data:
+                if form.get('image'):
+                    image = form['image']
+                    Images.objects.create(post=new_post, image=image)
+
+            return redirect(new_post)
+
+        return render(request, 'blog/post_create.html', context={
+            'form': post_form,
+            'formset': image_formset
+        })
 
 
 class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
