@@ -38,7 +38,10 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
                 if form.get('image'):
                     name = form['name']
                     image = form['image']
-                    Images.objects.create(name=name, post=new_post, image=image)
+                    Images.objects.create(name=name, post=new_post,image=image)
+
+            new_post.replace_number_on_url()
+            new_post.save()
 
             return redirect(new_post)
 
