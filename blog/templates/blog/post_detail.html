@@ -14,6 +14,7 @@
     {% endif %}
 
     <p>
-        {{ post.body|safe }}
+        {{ post.get_body_with_images|safe }}
     </p>
+
 {% endblock %}

@@ -36,8 +36,9 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
 
             for form in image_formset.cleaned_data:
                 if form.get('image'):
+                    name = form['name']
                     image = form['image']
-                    Images.objects.create(post=new_post, image=image)
+                    Images.objects.create(name=name, post=new_post, image=image)
 
             return redirect(new_post)
 

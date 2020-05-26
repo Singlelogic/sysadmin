@@ -50,4 +50,8 @@ class PostForm(forms.ModelForm):
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Images
-        fields = ['image']
+        fields = ['name', 'image']
+
+    widgets = {
+        'name': forms.TextInput(attrs={'class': 'form-control'})
+    }

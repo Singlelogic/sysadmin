@@ -27,6 +27,14 @@ class Post(models.Model):
     def get_delete_url(self):
         return reverse('post_delete_url', kwargs={'slug': self.slug})
 
+    def get_body_with_images(self):
+        body = self.body
+        for number in range(self.images_set.count()):
+            number = str(number)
+            path_img = self.images_set.get(name=number).image.url
+            body = body.replace(f'/*{number}*/', f'<img src="{path_img}">')
+        return body
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = gen_slug(self.title)
@@ -81,6 +89,11 @@ def get_image_filename(instance, filename):
 
 
 class Images(models.Model):
+    name = models.CharField(blank=True, max_length=20)
     post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_image_filename,
                               verbose_name='Image')
+
+    def __str__(self):
+        return "%s - %s" % (self.post.title, self.name)
+
