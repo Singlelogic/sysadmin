@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{{ post.get_update_url }}" method="post">
+    <form action="{{ post.get_update_url }}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <div class="form-group">
@@ -19,6 +19,12 @@
                 {{ field }}
             </div>
         {% endfor %}
+
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <p>{{ form }}</p>
+        {% endfor %}
+
         <button type="submit" class="btn btn-primary">Edit post</button>
      </form>
 {% endblock %}

@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.forms import formset_factory
+from django.forms.models import modelformset_factory
 
 from .forms import TagForm, PostForm, ImageForm
 from .models import Post, Tag, Images
@@ -38,10 +39,9 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
                 if form.get('image'):
                     name = form['name']
                     image = form['image']
-                    Images.objects.create(name=name, post=new_post,image=image)
+                    Images.objects.create(name=name, post=new_post, image=image)
 
             new_post.replace_number_on_url()
-            new_post.save()
 
             return redirect(new_post)
 
@@ -51,11 +51,42 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
         })
 
 
-class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
-    model = Post
-    model_form = PostForm
-    template = 'blog/post_update_form.html'
+class PostUpdate(LoginRequiredMixin, View):
     raise_exception = True
+    ImageFormSet = modelformset_factory(Images, form=ImageForm,
+                                        fields={'name', 'image'}, extra=0)
+
+    def get(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        post.replace_url_on_number()
+        bound_form = PostForm(instance=post)
+        post_images = self.ImageFormSet(queryset=post.images_set.all())
+
+        return render(request, 'blog/post_update_form.html', context={
+            'form': bound_form,
+            'post': post,
+            'formset': post_images
+        })
+
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        bound_form = PostForm(request.POST, request.FILES, instance=post)
+        post_images = self.ImageFormSet(request.POST, request.FILES,
+                                        queryset=post.images_set.all())
+
+        if post_images.is_valid():
+            post_images.save()
+
+        if bound_form.is_valid():
+            post.replace_number_on_url()
+            new_obj = bound_form.save()
+            return redirect(new_obj)
+
+        return render(request, 'blog/post_update_form.html', context={
+            'form': bound_form,
+            'post': post,
+            'formset': post_images
+        })
 
 
 class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
