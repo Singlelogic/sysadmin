@@ -20,6 +20,11 @@
             </div>
         {% endfor %}
 
+        {{ modelformset.management_form }}
+        {% for form in modelformset %}
+            <p>{{ form }}</p>
+        {% endfor %}
+
         {{ formset.management_form }}
         {% for form in formset %}
             <p>{{ form }}</p>

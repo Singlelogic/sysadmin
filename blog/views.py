@@ -53,39 +53,53 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
 
 class PostUpdate(LoginRequiredMixin, View):
     raise_exception = True
-    ImageFormSet = modelformset_factory(Images, form=ImageForm,
-                                        fields={'name', 'image'}, extra=0)
+    ImageModelFormSet = modelformset_factory(Images, form=ImageForm,
+                                             fields={'name', 'image'}, extra=0)
+    ImageFormSet = formset_factory(ImageForm, extra=5)
 
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         post.replace_url_on_number()
         bound_form = PostForm(instance=post)
-        post_images = self.ImageFormSet(queryset=post.images_set.all())
+        post_images = self.ImageModelFormSet(queryset=post.images_set.all())
+        image_formset = self.ImageFormSet()
 
         return render(request, 'blog/post_update_form.html', context={
             'form': bound_form,
             'post': post,
-            'formset': post_images
+            'modelformset': post_images,
+            'formset': image_formset
         })
 
     def post(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         bound_form = PostForm(request.POST, request.FILES, instance=post)
-        post_images = self.ImageFormSet(request.POST, request.FILES,
-                                        queryset=post.images_set.all())
+        post_images = self.ImageModelFormSet(request.POST, request.FILES,
+                                             queryset=post.images_set.all())
+        image_formset = self.ImageFormSet(request.POST, request.FILES)
 
         if post_images.is_valid():
             post_images.save()
 
-        if bound_form.is_valid():
+        if image_formset.is_valid():
+            for form in image_formset.cleaned_data:
+                if form.get('image'):
+                    name = form['name']
+                    image = form['image']
+                    Images.objects.create(name=name, post=post, image=image)
+
             post.replace_number_on_url()
-            new_obj = bound_form.save()
-            return redirect(new_obj)
+
+            if bound_form.is_valid():
+                post.replace_number_on_url()
+                new_obj = bound_form.save()
+                return redirect(new_obj)
 
         return render(request, 'blog/post_update_form.html', context={
             'form': bound_form,
             'post': post,
-            'formset': post_images
+            'modelformset': post_images,
+            'formset': image_formset
         })
 
 
