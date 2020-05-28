@@ -31,14 +31,14 @@ class Post(models.Model):
         for image in self.images_set.all():
             self.body = self.body.replace(
                 f'/*{image.name}*/',
-                f'<img src="{image.image.url}">'
+                f'<img class="post" src="{image.image.url}">'
             )
         self.save()
 
     def replace_url_on_number(self):
         for image in self.images_set.all():
             self.body = self.body.replace(
-                f'<img src="{image.image.url}">',
+                f'<img class="post" src="{image.image.url}">',
                 f'/*{image.name}*/'
             )
         # self.save()

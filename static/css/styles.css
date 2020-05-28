@@ -33,3 +33,9 @@ a.edit, a.delete { /* a tag; edit/deleted class */
     bottom: 0;
     right: 0;
 }
+
+img.post{
+    max-width: 70%;
+    height: auto;
+    display: block;
+}
