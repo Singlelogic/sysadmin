@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mt-3">Post with "{{ tag.title|title }}" tag:</h1>
+    <h2 class="mt-3">Post with "{{ tag.title|title }}":</h2>
     {% for post in tag.posts.all %}
         {% include 'blog/includes/post_card_template.html' %}
     {% endfor %}

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mb-3">Tags:</h1>
+    <h2 class="mb-3">Tags:</h2>
     {% for tag in tags %}
         <h3><a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a></h3>
     {% endfor %}
