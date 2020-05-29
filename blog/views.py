@@ -54,21 +54,18 @@ class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
 class PostUpdate(LoginRequiredMixin, View):
     raise_exception = True
     ImageModelFormSet = modelformset_factory(Images, form=ImageForm,
-                                             fields={'name', 'image'}, extra=0)
-    ImageFormSet = formset_factory(ImageForm, extra=5)
+                                             fields={'name', 'image'}, extra=3)
 
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         post.replace_url_on_number()
         bound_form = PostForm(instance=post)
         post_images = self.ImageModelFormSet(queryset=post.images_set.all())
-        image_formset = self.ImageFormSet()
 
         return render(request, 'blog/post_update_form.html', context={
             'form': bound_form,
             'post': post,
-            'modelformset': post_images,
-            'formset': image_formset
+            'modelformset': post_images
         })
 
     def post(self, request, slug):
@@ -76,14 +73,15 @@ class PostUpdate(LoginRequiredMixin, View):
         bound_form = PostForm(request.POST, request.FILES, instance=post)
         post_images = self.ImageModelFormSet(request.POST, request.FILES,
                                              queryset=post.images_set.all())
-        image_formset = self.ImageFormSet(request.POST, request.FILES)
 
         if post_images.is_valid():
-            post_images.save()
+            for form in post_images.cleaned_data:
+                obj = form.get('id')
+                if obj:
+                    obj.image = form.get('image')
+                    obj.save()
 
-        if image_formset.is_valid():
-            for form in image_formset.cleaned_data:
-                if form.get('image'):
+                elif not obj and form.get('image'):
                     name = form['name']
                     image = form['image']
                     Images.objects.create(name=name, post=post, image=image)
@@ -98,8 +96,7 @@ class PostUpdate(LoginRequiredMixin, View):
         return render(request, 'blog/post_update_form.html', context={
             'form': bound_form,
             'post': post,
-            'modelformset': post_images,
-            'formset': image_formset
+            'modelformset': post_images
         })
 
 
