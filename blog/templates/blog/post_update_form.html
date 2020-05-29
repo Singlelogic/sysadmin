@@ -22,7 +22,10 @@
 
         {{ modelformset.management_form }}
         {% for form in modelformset %}
-            <p>{{ form }}</p>
+            <p>
+                {{ form }}
+                <a href="{{ form.instance.get_delete_url }}" class="btn btn-danger">Delete</a>
+            </p>
         {% endfor %}
 
         <button type="submit" class="btn btn-primary">Edit post</button>

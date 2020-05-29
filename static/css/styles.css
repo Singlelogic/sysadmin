@@ -39,3 +39,10 @@ img.post{
     height: auto;
     display: block;
 }
+
+img.delete{
+    max-width: 60%;
+    height: auto;
+    display: block;
+    margin-bottom: 8px;
+}

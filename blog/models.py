@@ -104,3 +104,10 @@ class Images(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.post.title, self.name)
+
+    def get_absolute_url(self):
+        post = self.post
+        return reverse('post_update_url', kwargs={'slug': post.slug})
+
+    def get_delete_url(self):
+        return reverse('image_delete_url', kwargs={'id': self.id})

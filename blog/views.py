@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
@@ -105,6 +105,18 @@ class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     template = 'blog/post_delete_form.html'
     redirect_url = 'posts_list_url'
     raise_exception = True
+
+
+class ImageDelete(View):
+    def get(self, request, id):
+        image = Images.objects.get(id=id)
+        return render(request, 'blog/image_delete.html', context={'image': image})
+
+    def post(self, request, id):
+        image = Images.objects.get(id=id)
+        post = image.post
+        image.delete()
+        return redirect(reverse('post_update_url', kwargs={'slug': post.slug}))
 
 
 def posts_list(request):
