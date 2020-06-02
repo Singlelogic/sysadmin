@@ -31,17 +31,16 @@ class Post(models.Model):
         for image in self.images_set.all():
             self.body = self.body.replace(
                 f'/*{image.name}*/',
-                f'<img class="post" src="{image.image.url}">'
+                f'{image.image.url}'
             )
         self.save()
 
     def replace_url_on_number(self):
         for image in self.images_set.all():
             self.body = self.body.replace(
-                f'<img class="post" src="{image.image.url}">',
+                f'{image.image.url}',
                 f'/*{image.name}*/'
             )
-        # self.save()
 
     def save(self, *args, **kwargs):
         if not self.id:
