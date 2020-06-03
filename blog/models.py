@@ -47,21 +47,6 @@ class Post(models.Model):
             self.slug = gen_slug(self.title)
         super().save(*args, **kwargs)
 
-        if self.image_preview:
-            filepath = self.image_preview.path
-            width = self.image_preview.width
-            height = self.image_preview.height
-            max_size = max(width, height)
-
-            if max_size > 200:
-                image = Image.open(filepath)
-                image = image.resize(
-                    (round(width / max_size * 200),
-                     round(height / max_size * 200)),
-                    Image.ANTIALIAS
-                )
-                image.save(filepath)
-
     def __str__(self):
         return self.title
 
