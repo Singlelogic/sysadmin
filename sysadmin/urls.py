@@ -24,7 +24,8 @@ from .views import redirect_blog
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
-    path('', redirect_blog)
+    path('', redirect_blog),
+    path('summernote/', include('django_summernote.urls')),
 ]
 
 if settings.DEBUG:
