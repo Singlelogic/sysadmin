@@ -2,7 +2,6 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
 from time import time
-from PIL import Image
 
 
 def gen_slug(s):
@@ -26,21 +25,6 @@ class Post(models.Model):
 
     def get_delete_url(self):
         return reverse('post_delete_url', kwargs={'slug': self.slug})
-
-    def replace_number_on_url(self):
-        for image in self.images_set.all():
-            self.body = self.body.replace(
-                f'/*{image.name}*/',
-                f'{image.image.url}'
-            )
-        self.save()
-
-    def replace_url_on_number(self):
-        for image in self.images_set.all():
-            self.body = self.body.replace(
-                f'{image.image.url}',
-                f'/*{image.name}*/'
-            )
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -78,20 +62,3 @@ def get_image_filename(instance, filename):
     title = instance.post.title
     slug = slugify(title)
     return "post_images/%s-%s" % (slug, filename)
-
-
-class Images(models.Model):
-    name = models.CharField(blank=True, max_length=20)
-    post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=get_image_filename,
-                              verbose_name='Image')
-
-    def __str__(self):
-        return "%s - %s" % (self.post.title, self.name)
-
-    def get_absolute_url(self):
-        post = self.post
-        return reverse('post_update_url', kwargs={'slug': post.slug})
-
-    def get_delete_url(self):
-        return reverse('image_delete_url', kwargs={'id': self.id})

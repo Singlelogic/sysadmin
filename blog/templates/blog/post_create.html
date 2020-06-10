@@ -19,12 +19,6 @@
                 {{ field }}
             </div>
         {% endfor %}
-
-        {{ formset.management_form }}
-        {% for form in formset %}
-            <p>{{ form }}</p>
-        {% endfor %}
-
         <button type="submit" class="btn btn-primary">Create Post</button>
      </form>
 {% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django_summernote.widgets import SummernoteWidget
 
-from .models import Tag, Post, Images
+from .models import Tag, Post
 
 
 class TagForm(forms.ModelForm):
@@ -45,13 +45,3 @@ class PostForm(forms.ModelForm):
         if Post.objects.filter(slug__iexact=new_slug).count():
             raise ValidationError('We have "{}" slug already'.format(new_slug))
         return new_slug
-
-
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Images
-        fields = ['name', 'image']
-
-    widgets = {
-        'name': forms.TextInput(attrs={'class': 'form-control'})
-    }
