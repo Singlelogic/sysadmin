@@ -54,6 +54,18 @@
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;">Search</button>
             </form>
+
+            <span class="user layer" style="color: white;">
+                {% if request.user.is_authenticated %}
+                    {{ request.user.first_name }}
+                    <a href="{% url 'logout' %}" style="color: white;" title="logout">
+                        <img class="button-icon" src="/static/logout.png" alt="Logout">
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" style="color: white;">Log-in</a>
+                {% endif %}
+            </span>
+
         </div>
     </nav>
 

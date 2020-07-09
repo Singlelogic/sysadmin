@@ -26,6 +26,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('', redirect_blog),
     path('summernote/', include('django_summernote.urls')),
+    path('account/', include('account.urls')),
 ]
 
 if settings.DEBUG:
