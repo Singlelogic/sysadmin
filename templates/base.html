@@ -57,7 +57,9 @@
 
             <span class="user layer" style="color: white;">
                 {% if request.user.is_authenticated %}
-                    {{ request.user.first_name }}
+                    <a href="{% url 'dashboard' %}" style="color: white;">
+                        {{ request.user.first_name }}
+                    </a>
                     <a href="{% url 'logout' %}" style="color: white;" title="logout">
                         <img class="button-icon" src="/static/logout.png" alt="Logout">
                     </a>
