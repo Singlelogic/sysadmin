@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
 from .forms import TagForm, PostForm
 from .models import Post, Tag
-from .mixins import *
+from .mixins import (
+    OblectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
+)
 from .utils import paginator
 
 
@@ -21,50 +23,16 @@ class PostDetail(View):
 
 
 class PostCreate(LoginRequiredMixin, OblectCreateMixin, View):
+    model_form = PostForm
+    template = 'blog/post_create.html'
     raise_exception = True
 
-    def get(self, request):
-        form = PostForm()
-        return render(request, 'blog/post_create.html', context={
-            'form': form,
-        })
 
-    def post(self, request):
-        post_form = PostForm(request.POST, request.FILES)
-
-        if post_form.is_valid():
-            new_post = post_form.save()
-            return redirect(new_post)
-
-        return render(request, 'blog/post_create.html', context={
-            'form': post_form,
-        })
-
-
-class PostUpdate(LoginRequiredMixin, View):
+class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
+    model = Post
+    model_form = PostForm
+    template = 'blog/post_update_form.html'
     raise_exception = True
-
-    def get(self, request, slug):
-        post = Post.objects.get(slug__iexact=slug)
-        bound_form = PostForm(instance=post)
-
-        return render(request, 'blog/post_update_form.html', context={
-            'form': bound_form,
-            'post': post,
-        })
-
-    def post(self, request, slug):
-        post = Post.objects.get(slug__iexact=slug)
-        bound_form = PostForm(request.POST, request.FILES, instance=post)
-
-        if bound_form.is_valid():
-            new_obj = bound_form.save()
-            return redirect(new_obj)
-
-        return render(request, 'blog/post_update_form.html', context={
-            'form': bound_form,
-            'post': post,
-        })
 
 
 class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
@@ -96,6 +64,7 @@ class TagDetail(View):
         page, is_paginated = paginator(request, posts)
         return render(request, 'blog/index.html', context={
             'detail': True,
+            'admin_object': obj,
             'page_object': page,
             'is_paginated': is_paginated,
             'title': obj.title,

@@ -33,7 +33,7 @@ class ObjectUpdateMixin:
 
     def post(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
-        bound_form = self.model_form(request.POST, instance=obj)
+        bound_form = self.model_form(request.POST, request.FILES, instance=obj)
         if bound_form.is_valid():
             new_obj = bound_form.save()
             return redirect(new_obj)

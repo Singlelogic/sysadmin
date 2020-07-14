@@ -34,6 +34,10 @@ a.edit, a.delete { /* a tag; edit/deleted class */
     right: 0;
 }
 
+.preview{
+    max-height: 100%;
+}
+
 img.post{
     max-width: 70%;
     height: auto;
