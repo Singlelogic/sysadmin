@@ -1,8 +1,8 @@
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
+from .forms import ProfileEditForm, UserEditForm, UserRegistrationForm
 from .models import Profile
-from .forms import UserEditForm, UserRegistrationForm, ProfileEditForm
 
 
 @login_required
