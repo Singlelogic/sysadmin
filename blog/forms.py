@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django_summernote.widgets import SummernoteWidget
 
-from .models import Post, Tag
+from .models import Comment, Post, Tag
 
 
 class TagForm(forms.ModelForm):
@@ -45,3 +45,15 @@ class PostForm(forms.ModelForm):
         if Post.objects.filter(slug__iexact=new_slug).count():
             raise ValidationError('We have "{}" slug already'.format(new_slug))
         return new_slug
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'email', 'body')
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control'}),
+        }
