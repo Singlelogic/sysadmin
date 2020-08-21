@@ -62,9 +62,9 @@ class Tag(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments',
                              on_delete=models.CASCADE)
-    name = models.CharField(max_length=80)
-    email = models.EmailField()
-    body = models.TextField()
+    name = models.CharField(u'Имя', max_length=80)
+    email = models.EmailField(u'E-mail')
+    body = models.TextField(u'Комментарий')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)

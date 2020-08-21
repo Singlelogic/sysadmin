@@ -54,3 +54,7 @@ img.delete{
 .layer{
     margin-left: 1%;
 }
+
+div.comment{
+    margin: 10px 0;
+}

@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -83,7 +83,7 @@
                     <nav aria-label="...">
                         <ul class="pagination">
                             <li class="page-item {% if not page_object.has_previous %} disabled {% endif %}">
-                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; first</a>
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; В начало</a>
                             </li>
 
                             {% for n in page_object.paginator.page_range %}
@@ -100,7 +100,7 @@
                             {% endfor %}
 
                             <li class="page-item {% if not page_object.has_next %} disabled {% endif %}">
-                                <a class="page-link" href="?page={{ page_object.paginator.num_pages }}" tabindex="-1">last &raquo;</a>
+                                <a class="page-link" href="?page={{ page_object.paginator.num_pages }}" tabindex="-1">В конец &raquo;</a>
                             </li>
                         </ul>
                     </nav>
@@ -113,7 +113,7 @@
 
     <div class="container mt-2">
         <div class="row">
-            <div class="col-6 offset-md-0">
+            <div class="col-8 offset-md-0">
 
                 {% block comments %}
                 {% endblock %}

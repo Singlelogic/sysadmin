@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mt-5">
+    <h1 class="mt-2">
         {{ post.title }}
     </h1>
 
@@ -21,31 +21,37 @@
 
 {% block comments %}
     {% with comments.count as total_comments %}
-    <h4>
+    <h5>
         {{ total_comments }} comment{{ total_comments|pluralize }}
-    </h4>
+    </h5>
     {% endwith %}
 
     {% for comment in comments %}
     <div class="comment">
-        <p class="info">
-            Comment {{ forloop.counter }} by {{ comment.name }}
-            {{ comment.created }}
-        </p>
-        {{ comment.body|linebreaks }}
+        <div class="card">
+            <div class="card-header">
+                Comment {{ forloop.counter }} by {{ comment.name }}
+                {{ comment.created }}
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <h6><p>{{ comment.body|linebreaks }}</p></h6>
+                </blockquote>
+            </div>
+        </div>
     </div>
     {% empty %}
-        <p>There are no comments yet.</p>
+        <p>Пока нет комминтариев.</p>
     {% endfor %}
 
     {% if new_comment %}
-        <h4>Your comment has been added.</h4>
+        <h5>Ваш комментарий был добавлен</h5>
     {% else %}
-        <h4>Add a new comment</h4>
+        <h5>Добавить новый комментарий</h5>
         <form action="." method="post">
             {{ comment_form.as_p }}
             {% csrf_token %}
-            <p><input type="submit" value="Add comment"></p>
+            <p><input type="submit" value="Отправить комментарий"></p>
         </form>
     {% endif %}
 {% endblock %}

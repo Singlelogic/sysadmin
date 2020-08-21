@@ -16,7 +16,7 @@ class PostDetail(View):
     def get(self, request, slug):
         obj = get_object_or_404(Post, slug__iexact=slug)
         comments = obj.comments.filter(active=True)
-        comment_form = CommentForm(data=request.POST)
+        comment_form = CommentForm()
         return render(request, 'blog/post_detail.html', context={
             'post': obj,
             'admin_object': obj,
