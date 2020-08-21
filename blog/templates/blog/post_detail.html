@@ -44,14 +44,18 @@
         <p>Пока нет комминтариев.</p>
     {% endfor %}
 
-    {% if new_comment %}
-        <h5>Ваш комментарий был добавлен</h5>
+    {% if request.user.is_authenticated %}
+        {% if new_comment %}
+            <h5>Ваш комментарий был добавлен</h5>
+        {% else %}
+            <h5>Добавить новый комментарий</h5>
+            <form action="." method="post">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <p><input type="submit" value="Отправить комментарий"></p>
+            </form>
+        {% endif %}
     {% else %}
-        <h5>Добавить новый комментарий</h5>
-        <form action="." method="post">
-            {{ comment_form.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Отправить комментарий"></p>
-        </form>
+        Для отправки комментария необходимо <a href="{% url 'login' %}">авторизоваться</a>.
     {% endif %}
 {% endblock %}
