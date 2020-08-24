@@ -30,7 +30,7 @@
     <div class="comment">
         <div class="card">
             <div class="card-header">
-                Comment {{ forloop.counter }} by {{ comment.name }}
+                Комментарий {{ forloop.counter }} от {{ comment.name }}
                 {{ comment.created }}
             </div>
             <div class="card-body">
@@ -56,6 +56,6 @@
             </form>
         {% endif %}
     {% else %}
-        Для отправки комментария необходимо <a href="{% url 'login' %}">авторизоваться</a>.
+        <p>Для отправки комментария необходимо <a href="{% url 'login' %}">авторизоваться</a>.</p>
     {% endif %}
 {% endblock %}
