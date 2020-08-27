@@ -59,6 +59,10 @@ div.comment{
     margin: 10px 0;
 }
 
+div.card-body-change{
+    margin: 5px 15px;
+}
+
 footer {
     background-color: #f8f8f8;
     border-top: #e7e7e7 1px solid;
