@@ -36,6 +36,7 @@ class PostDetail(View):
             new_comment.post = obj
             # Save the comment to the database
             new_comment.save()
+            comment_form = CommentForm()
 
         return render(request, 'blog/post_detail.html', context={
             'post': obj,
