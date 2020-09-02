@@ -12,7 +12,7 @@
             <div class="card-body">
 <!--                <h5 class="card-title">{{ post.title }}</h5>-->
                 <a href="{{ post.get_absolute_url }}" class="card-title" style="color: black;">{{ post.title }}</a>
-                <p class="card-text">{{ post.body|safe|truncatewords:28 }}</p>
+                <p class="card-text">{{ post.body|safe|truncatechars_html:100 }}</p>
                 <p class="card-text inline"><small class="text-muted">{{ post.date_pub }}</small></p>
                 <a href="{{ post.get_absolute_url }}" class="btn btn-light inline" style="float: right;">Читать</a>
             </div>
