@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import redirect_blog
+from .views import privacy, redirect_blog
 
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('', redirect_blog),
     path('summernote/', include('django_summernote.urls')),
     path('account/', include('account.urls')),
+    path('privacy/', privacy, name='privacy'),
 ]
 
 if settings.DEBUG:
