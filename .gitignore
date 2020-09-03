@@ -6,3 +6,4 @@ media/
 test.py
 .env
 venv/
+staticfiles/
