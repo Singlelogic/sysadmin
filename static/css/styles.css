@@ -144,3 +144,13 @@ box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 -o-transition: all 250ms ease-in-out 0s;
 transition: all 250ms ease-in-out 0s;
 }
+
+.Site {
+  display: flex;
+  min-height: 65vh;
+  flex-direction: column;
+}
+
+.Site-content {
+  flex: 1;
+}

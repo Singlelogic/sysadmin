@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" , content="width=device-width" , initial-scale="1.0">
@@ -28,181 +29,176 @@
         {% endblock %}
     </title>
 </head>
-<body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand" href="{% url 'posts_list_url' %}" style="color: white;">Sysadmin</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<body class="Site">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <a class="navbar-brand" href="{% url 'posts_list_url' %}" style="color: white;">Sysadmin</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'tag_detail_url' 'linux' %}" style="color: white;">Linux</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'tag_detail_url' 'windows' %}" style="color: white;">Windows</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'tags_list_url' %}" style="color: white;">Tags</a>
-            </li>
-        </ul>
-
-        <form class="form-inline my-2 my-lg-0" action="{% url 'posts_list_url' %}">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;">Search</button>
-        </form>
-
-        <span class="user layer" style="color: white;">
-                {% if request.user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" style="color: white;">
-                        {{ request.user.first_name }}
-                    </a>
-                    <a href="{% url 'logout' %}" style="color: white;" title="logout">
-                        <img class="button-icon" src="/static/logout.png" alt="Logout">
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}" style="color: white;">Log-in</a>
-                {% endif %}
-            </span>
-
-    </div>
-</nav>
-
-<div class="container mt-2">
-    <div class="row">
-        <div class="col-9 offset-md-0">
-
-            {% block content %}
-            text
-            {% endblock %}
-
-            {% if is_paginated %}
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item {% if not page_object.has_previous %} disabled {% endif %}">
-                        <a class="page-link" href="?page=1" tabindex="-1">&laquo; В начало</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tag_detail_url' 'linux' %}" style="color: white;">Linux</a>
                     </li>
-
-                    {% for n in page_object.paginator.page_range %}
-                    {% if page_object.number == n %}
-                    <li class="page-item active">
-                        <a class="page-link" href="?page={{ n }}">{{ n }}
-                            <span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tag_detail_url' 'windows' %}" style="color: white;">Windows</a>
                     </li>
-                    {% elif n > page_object.number|add:-3 and n < page_object.number|add:3 %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ n }}">{{ n }}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-
-                    <li class="page-item {% if not page_object.has_next %} disabled {% endif %}">
-                        <a class="page-link" href="?page={{ page_object.paginator.num_pages }}" tabindex="-1">В конец
-                            &raquo;</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tags_list_url' %}" style="color: white;">Tags</a>
                     </li>
                 </ul>
-            </nav>
-            {% endif %}
 
-        </div>
-    </div>
-</div>
+                <form class="form-inline my-2 my-lg-0" action="{% url 'posts_list_url' %}">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;">Search</button>
+                </form>
 
+                <span class="user layer" style="color: white;">
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'dashboard' %}" style="color: white;">
+                                {{ request.user.first_name }}
+                            </a>
+                            <a href="{% url 'logout' %}" style="color: white;" title="logout">
+                                <img class="button-icon" src="/static/logout.png" alt="Logout">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}" style="color: white;">Log-in</a>
+                        {% endif %}
+                    </span>
 
-<div class="container mt-2">
-    <div class="row">
-        <div class="col-8 offset-md-0">
+            </div>
+        </nav>
+    </header>
 
-            {% block comments %}
-            {% endblock %}
-
-        </div>
-    </div>
-</div>
-
-
-{% if request.user.is_authenticated and request.user.is_staff %}
-<div class="admin-panel align-items-center">
-    <a href="/admin" class="btn btn-outline-info">Admin</a>
-    {% block admin-panel %}{% endblock %}
-</div>
-{% endif %}
-
-<footer id="footer" class="footer-1">
-<!--    <div class="main-footer widgets-dark typo-light">-->
-    <div class="main-footer bg-dark typo-light">
-        <div class="container">
+    <main class="Site-content">
+        <div class="container mt-2">
             <div class="row">
+                <div class="col-9 offset-md-0">
 
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                    <div class="widget subscribe no-box">
-                        <h5 class="widget-title">Sysadmin<span></span></h5>
-                        <p>Сайт заметок системного администратора</p>
-                    </div>
-                </div>
+                    {% block content %}
+                    text
+                    {% endblock %}
 
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                    <div class="widget no-box">
-                        <h5 class="widget-title">Ссылки<span></span></h5>
-                        <ul class="thumbnail-widget">
-                            <li>
-                                <div class="thumb-content"><a href="{% url 'tag_detail_url' 'linux' %}">Linux</a></div>
+                    {% if is_paginated %}
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li class="page-item {% if not page_object.has_previous %} disabled {% endif %}">
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; В начало</a>
                             </li>
-                            <li>
-                                <div class="thumb-content"><a href="{% url 'tag_detail_url' 'windows' %}">Windows</a></div>
+                            {% for n in page_object.paginator.page_range %}
+                                {% if page_object.number == n %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="?page={{ n }}">{{ n }}
+                                        <span class="sr-only">(current)</span></a>
+                                </li>
+                                {% elif n > page_object.number|add:-3 and n < page_object.number|add:3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="page-item {% if not page_object.has_next %} disabled {% endif %}">
+                                <a class="page-link" href="?page={{ page_object.paginator.num_pages }}" tabindex="-1">В конец
+                                    &raquo;</a>
                             </li>
                         </ul>
-                    </div>
+                    </nav>
+                    {% endif %}
                 </div>
-
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                    <div class="widget no-box">
-                        <h5 class="widget-title">Регистрация<span></span></h5>
-                        <p>Зарегистрируйтесь, чтобы задавать вопросы и оставлять комментарии к статьям</p>
-                        <a class="btn btn-footer" href="{% url 'register' %}" target="_blank">Register Now</a>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-
-                    <div class="widget no-box">
-                        <h5 class="widget-title">Контакты<span></span></h5>
-
-                        <p><a href="mailto:info@domain.com" title="glorythemes">singlelogic@gmail.com</a></p>
-<!--                        <ul class="social-footer2">-->
-<!--                            <li class=""><a title="youtube" target="_blank" href="/"><img alt="youtube" width="30"-->
-<!--                                                                                          height="30" src=""></a>-->
-<!--                            </li>-->
-<!--                            <li class=""><a href="/" target="_blank" title="Facebook"><img alt="Facebook" width="30"-->
-<!--                                                                                           height="30" src=""></a>-->
-<!--                            </li>-->
-<!--                            <li class=""><a href="/" target="_blank" title="Twitter"><img alt="Twitter" width="30"-->
-<!--                                                                                          height="30" src=""></a>-->
-<!--                            </li>-->
-<!--                            <li class=""><a title="instagram" target="_blank" href="/"><img alt="instagram"-->
-<!--                                                                                            width="30" height="30"-->
-<!--                                                                                            src=""></a></li>-->
-<!--                        </ul>-->
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
 
-    <div class="footer-copyright bg-dark">
-        <div class="container">
+
+        <div class="container mt-2">
             <div class="row">
-                <div class="col-md-12 text-center">
-                    <p>Копирование материалов сайта без активной гиперссылки на оригинал запрещено! © 2020</p>
+                <div class="col-8 offset-md-0">
+                    {% block comments %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
-    </div>
-</footer>
 
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <div class="admin-panel align-items-center">
+            <a href="/admin" class="btn btn-outline-info">Admin</a>
+            {% block admin-panel %}{% endblock %}
+        </div>
+        {% endif %}
+    </main>
+
+    <footer id="footer" class="footer-1">
+    <!--    <div class="main-footer widgets-dark typo-light">-->
+        <div class="main-footer bg-dark typo-light">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget subscribe no-box">
+                            <h5 class="widget-title">Sysadmin<span></span></h5>
+                            <p>Сайт заметок системного администратора</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Ссылки<span></span></h5>
+                            <ul class="thumbnail-widget">
+                                <li>
+                                    <div class="thumb-content"><a href="{% url 'tag_detail_url' 'linux' %}">Linux</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="{% url 'tag_detail_url' 'windows' %}">Windows</a></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Регистрация<span></span></h5>
+                            <p>Зарегистрируйтесь, чтобы задавать вопросы и оставлять комментарии к статьям</p>
+                            <a class="btn btn-footer" href="{% url 'register' %}" target="_blank">Register Now</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Контакты<span></span></h5>
+
+                            <p><a href="mailto:info@domain.com" title="glorythemes">singlelogic@gmail.com</a></p>
+    <!--                        <ul class="social-footer2">-->
+    <!--                            <li class=""><a title="youtube" target="_blank" href="/"><img alt="youtube" width="30"-->
+    <!--                                                                                          height="30" src=""></a>-->
+    <!--                            </li>-->
+    <!--                            <li class=""><a href="/" target="_blank" title="Facebook"><img alt="Facebook" width="30"-->
+    <!--                                                                                           height="30" src=""></a>-->
+    <!--                            </li>-->
+    <!--                            <li class=""><a href="/" target="_blank" title="Twitter"><img alt="Twitter" width="30"-->
+    <!--                                                                                          height="30" src=""></a>-->
+    <!--                            </li>-->
+    <!--                            <li class=""><a title="instagram" target="_blank" href="/"><img alt="instagram"-->
+    <!--                                                                                            width="30" height="30"-->
+    <!--                                                                                            src=""></a></li>-->
+    <!--                        </ul>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>Копирование материалов сайта без активной гиперссылки на оригинал запрещено! © 2020</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
-
 </html>

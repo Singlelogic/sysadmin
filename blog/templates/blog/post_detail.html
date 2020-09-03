@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mt-2">
+    <h4 class="mt-2">
         {{ post.title }}
-    </h1>
+    </h4>
 
     {% if post.image_preview %}
         <img class="post" src="{{ post.image_preview.url }}">
