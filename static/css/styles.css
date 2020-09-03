@@ -147,7 +147,7 @@ transition: all 250ms ease-in-out 0s;
 
 .Site {
   display: flex;
-  min-height: 65vh;
+  min-height: 100vh;
   flex-direction: column;
 }
 
